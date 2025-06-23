@@ -6,7 +6,7 @@ CFLAGS  = -bt=nt -bm -fp5 -fpi87 -mf -oeatxh -w4 -ei -j -zp8
 # -5r  :  Pentium register calling conventions.
 CFLAGS += -5s
 CFLAGS += -I.
-CPPFLAGS= -DHAVE_ALLOCA -DHAVE_ALLOCA_H -D_LOW_ACCURACY_ -DLIMIT_TO_64kHz
+CPPFLAGS= -DHAVE_ALLOCA -DHAVE_ALLOCA_H -D_LOW_ACCURACY_ -DLIMIT_TO_64kHz -D_DISABLE_COMMENTS
 LIBNAME = vorbisidec.lib
 
 COMPILE = wcc386 -q $(CFLAGS) $(CPPFLAGS)

@@ -107,6 +107,14 @@ AC_ARG_ENABLE(alloca,
    [enable_alloca=yes]
 )
 
+AC_ARG_ENABLE(comments,
+   [AS_HELP_STRING([--disable-comments], [disable allocating any vorbis comments])],,
+   [enable_comments=yes]
+)
+if test x$enable_comments != xyes; then
+   CFLAGS="$CFLAGS -D_DISABLE_COMMENTS"
+fi
+
 dnl --------------------------------------------------
 dnl Check for headers
 dnl --------------------------------------------------

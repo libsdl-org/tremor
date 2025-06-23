@@ -196,6 +196,33 @@ static int _vorbis_unpack_info(vorbis_info *vi,oggpack_buffer *opb){
   return(OV_EBADHEADER);
 }
 
+#ifdef _DISABLE_COMMENTS
+static int _vorbis_unpack_comment(vorbis_comment *vc,oggpack_buffer *opb){
+  int i,n;
+  n=oggpack_read(opb,32); /* vendorlen */
+  if(n<0)goto err_out;
+  while(n--){
+    oggpack_read(opb,8); /* skip-read */
+  }
+  n=oggpack_read(opb,32); /* vc->comments */
+  if(n<0)goto err_out;
+  for(i=0;i<n;i++){
+    int len=oggpack_read(opb,32);
+    if(len<0)goto err_out;
+    while(len--){
+      oggpack_read(opb,8); /* skip-read */
+    }
+  }
+  if(oggpack_read(opb,1)!=1)goto err_out; /* EOP check */
+
+  vc->vendor=(char *)_ogg_malloc(8);
+  memcpy(vc->vendor,"Unknown",8);
+  return(0);
+ err_out:
+  vorbis_comment_clear(vc);
+  return(OV_EBADHEADER);
+}
+#else
 static int _vorbis_unpack_comment(vorbis_comment *vc,oggpack_buffer *opb){
   int i;
   int vendorlen=oggpack_read(opb,32);
@@ -221,6 +248,7 @@ static int _vorbis_unpack_comment(vorbis_comment *vc,oggpack_buffer *opb){
   vorbis_comment_clear(vc);
   return(OV_EBADHEADER);
 }
+#endif
 
 /* all of the real encoding details are here.  The modes, books,
    everything */
